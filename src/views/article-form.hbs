@@ -1,0 +1,29 @@
+{{> navbar}}
+<div class="container mt-3">
+  <h1>
+    {{#if id}}
+      Actualizando el artículo "{{title}}" ({{id}})
+    {{else}}
+      Crear un nuevo artículo
+    {{/if}}
+  </h1>
+  <!--
+    Este formulario se usará tanto para edición como creación, este if nos dice que si viene un id, entonces será un update, si no, será un create.
+    Para el action, si viene un id será un post a /articles/:id/update, si no, será un post a /articles/create.
+  -->
+  <form action="/articles/{{#if id}}{{id}}/update{{else}}create{{/if}}" method="POST">
+    <div class="mb-3">
+      <label for="title" class="form-label">Título</label>
+      <input type="text" class="form-control" name="title" aria-describedby="titleHelp" required="true" value="{{title}}">
+      <div id="titleHelp" class="form-text">Utiliza un título ingenioso</div>
+    </div>
+    <div class="mb-3">
+      <label for="content" class="form-label">Contenido</label>
+      <textarea class="form-control" name="content" rows="3" aria-describedby="contentHelp">{{content}}</textarea>
+      <div id="contentHelp" class="form-text">¿Que quieres contar al mundo?</div>
+    </div>
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary">Enviar</button>
+    </div>
+  </form>
+</div>

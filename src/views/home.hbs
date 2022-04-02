@@ -1,0 +1,21 @@
+{{> navbar}}
+<div class="container mt-3">
+  <header class="my-5">
+    <h1>Bienvenido a mi blog</h1>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ultricies maximus mi sed faucibus. Donec auctor, dui nec varius condimentum, tellus mauris lobortis libero, vel finibus neque leo vel nisi. Nullam tellus magna, porttitor nec dolor non, iaculis facilisis felis. Mauris pharetra accumsan augue, dapibus blandit nisi facilisis vitae. Suspendisse ultrices egestas libero sit amet sodales. Suspendisse eu velit id urna eleifend egestas. Etiam sit amet quam luctus, interdum nulla sed, faucibus nisl.
+    </p>
+    <a href="/about">Conóceme</a>
+  </header>
+  <hr>
+  <h3 class="mt-5 mb-3">Últimos artículos</h3>
+  {{#each articles}}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{this.title}}</h5>
+        <p class="card-text">{{this.content}}</p>
+        <a href="/articles/{{this.id}}" class="btn btn-primary btn-sm">Leer más</a>
+      </div>
+    </div>
+  {{/each}}
+</div>
