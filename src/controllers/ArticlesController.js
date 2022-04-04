@@ -1,73 +1,126 @@
+const ArticlesDAO = require('../models/dao/ArticlesDAO')
+
 class ArticlesController {
-  renderHomeWithArticles (req, res) {
-    const mockArticles = [
-      { id: 1, title: 'Artículo de prueba 1', content: 'Contenido de mi artículo' },
-      { id: 2, title: 'Artículo de prueba 2', content: 'Contenido de mi artículo' }
-    ]
+  constructor (db) {
+    this.articlesDao = new ArticlesDAO(db)
+    this.renderHomeWithArticles = this.renderHomeWithArticles.bind(this)
+    this.renderSingleArticle = this.renderSingleArticle.bind(this)
+    this.renderArticleCreationForm = this.renderArticleCreationForm.bind(this)
+    this.renderArticleUpdateForm = this.renderArticleUpdateForm.bind(this)
+    this.insertAndRenderArticle = this.insertAndRenderArticle.bind(this)
+    this.updateAndRenderArticle = this.updateAndRenderArticle.bind(this)
+    this.deleteArticleAndRenderResponse = this.deleteArticleAndRenderResponse.bind(this)
+  }
+
+  async renderHomeWithArticles (req, res) {
+    const articles = await this.articlesDao.getAll()
     res.render('home', {
-      articles: mockArticles
+      articles
     })
   }
 
-  renderSingleArticle (req, res) {
+  async renderSingleArticle (req, res) {
     const id = req.params.id
 
-    // TODO: Esta información debería venir de la base de datos
+    try {
+      const article = await this.articlesDao.getById(id)
 
-    res.render('article', {
-      id,
-      title: 'Este es el título',
-      content: 'Este es el contenido'
-    })
+      if (!article) {
+        res.status(404).render('404')
+        return
+      }
+
+      res.render('article', {
+        id,
+        title: article.title,
+        content: article.content
+      })
+    } catch (error) {
+      console.log(error)
+      res.status(500).render('500')
+    }
   }
 
   renderArticleCreationForm (req, res) {
     res.render('article-form')
   }
 
-  renderArticleUpdateForm (req, res) {
+  async renderArticleUpdateForm (req, res) {
     const id = req.params.id
 
-    // TODO: Esta información debería venir de la base de datos
-    res.render('article-form', {
-      id,
-      title: 'Titulo del artículo a editar',
-      content: 'Contenido del artículo a editar'
-    })
+    try {
+      const article = await this.articlesDao.getById(id)
+
+      if (!article) {
+        res.status(404).render('404')
+        return
+      }
+
+      res.render('article-form', {
+        id,
+        title: article.title,
+        content: article.content
+      })
+    } catch (error) {
+      console.log(error)
+      res.status(500).render('500')
+    }
   }
 
-  insertAndRenderArticle (req, res) {
+  async insertAndRenderArticle (req, res) {
     const title = req.body.title
     const content = req.body.content
 
-    console.log('Aquí se debería insertar el contenido en base de datos', { title, content })
+    const article = { title, content }
 
-    // TODO: Este ID debería venir como respuesta de la inserción en la base de datos
-    const id = 1
+    try {
+      const id = await this.articlesDao.create(article)
 
-    res.redirect(`/articles/${id}`)
+      res.redirect(`/articles/${id}`)
+    } catch (error) {
+      console.log(error)
+      res.status(500).render('500')
+    }
   }
 
-  updateAndRenderArticle (req, res) {
+  async updateAndRenderArticle (req, res) {
     const id = req.params.id
     const title = req.body.title
     const content = req.body.content
 
-    console.log('Aquí se debería actualizar el contenido en base de datos', { id, title, content })
+    try {
+      const article = { title, content, id }
 
-    res.redirect(`/articles/${id}`)
+      await this.articlesDao.update(article)
+
+      res.redirect(`/articles/${id}`)
+    } catch (error) {
+      console.log(error)
+      res.status(500).render('500')
+    }
   }
 
-  deleteArticleAndRenderResponse (req, res) {
+  async deleteArticleAndRenderResponse (req, res) {
     const id = req.params.id
 
-    console.log('Esto debería eliminar', { id })
+    try {
+      const article = await this.articlesDao.getById(id)
 
-    // TODO: El título debe venir de la base de datos
-    res.render('article-deleted', {
-      id,
-      title: 'Título '
-    })
+      if (!article) {
+        res.status(404).render('404')
+        return
+      }
+
+      await this.articlesDao.delete(id)
+
+      res.render('article-deleted', {
+        id,
+        title: article.title
+      })
+    } catch (error) {
+      console.log(error)
+      res.status(500).render('500')
+    }
   }
 }
 

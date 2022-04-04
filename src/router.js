@@ -1,12 +1,16 @@
 const express = require('express')
 const ArticlesController = require('./controllers/ArticlesController')
 const PageController = require('./controllers/PageController')
+const SqlClient = require('./lib/SqlClient')
 
 const router = express.Router()
 
+// Database Client
+const sqlClient = new SqlClient()
+
 // Controllers
 const pageController = new PageController()
-const articlesController = new ArticlesController()
+const articlesController = new ArticlesController(sqlClient)
 
 // Routes
 router.get('/', articlesController.renderHomeWithArticles)
