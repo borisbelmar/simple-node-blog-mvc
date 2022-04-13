@@ -1,6 +1,6 @@
 {
   "name": "simple-node-blog-mvc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This project is a example for MVC pattern in NodeJS",
   "scripts": {
     "start": "node src/index.js",
