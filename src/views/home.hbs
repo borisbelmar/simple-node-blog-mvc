@@ -12,6 +12,7 @@
   {{#each articles}}
     <div class="card mb-3">
       <div class="card-body">
+        <img src="{{this.image}}" width="250px" height="250px">
         <h5 class="card-title">{{this.title}}</h5>
         <p class="card-text">{{this.content}}</p>
         <a href="/articles/{{this.id}}" class="btn btn-primary btn-sm">Leer más</a>

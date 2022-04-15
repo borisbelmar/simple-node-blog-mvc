@@ -33,7 +33,8 @@ class ArticlesController {
       res.render('article', {
         id,
         title: article.title,
-        content: article.content
+        content: article.content,
+        image: article.image
       })
     } catch (error) {
       console.log(error)
@@ -59,7 +60,8 @@ class ArticlesController {
       res.render('article-form', {
         id,
         title: article.title,
-        content: article.content
+        content: article.content,
+        image: article.image
       })
     } catch (error) {
       console.log(error)
@@ -70,8 +72,9 @@ class ArticlesController {
   async insertAndRenderArticle (req, res) {
     const title = req.body.title
     const content = req.body.content
+    const image = req.body.image
 
-    const article = { title, content }
+    const article = { title, content, image }
 
     try {
       const id = await this.articlesDao.create(article)
@@ -87,9 +90,10 @@ class ArticlesController {
     const id = req.params.id
     const title = req.body.title
     const content = req.body.content
+    const image = req.body.image
 
     try {
-      const article = { title, content, id }
+      const article = { title, content, id, image }
 
       await this.articlesDao.update(article)
 

@@ -9,25 +9,25 @@ class ArticlesDAO {
   }
 
   async getAll () {
-    const response = await this.db.query('SELECT id, title, content FROM articles')
+    const response = await this.db.query('SELECT id, title, content, image FROM articles')
     const rows = response[0]
     return rows
   }
 
   async getById (id) {
-    const response = await this.db.query('SELECT id, title, content FROM articles WHERE id = ?', [id])
+    const response = await this.db.query('SELECT id, title, content, image FROM articles WHERE id = ?', [id])
     const rows = response[0]
     return rows[0]
   }
 
   async create (article) {
-    const response = await this.db.query('INSERT INTO articles (title, content) VALUES (?, ?)', [article.title, article.content])
+    const response = await this.db.query('INSERT INTO articles (title, content, image) VALUES (?, ?, ?)', [article.title, article.content, article.image])
     const result = response[0]
     return result.insertId
   }
 
   async update (article) {
-    const response = await this.db.query('UPDATE articles SET title = ?, content = ? WHERE id = ?', [article.title, article.content, article.id])
+    const response = await this.db.query('UPDATE articles SET title = ?, content = ?, image = ? WHERE id = ?', [article.title, article.content, article.image, article.id])
     const result = response[0]
     return result
   }
